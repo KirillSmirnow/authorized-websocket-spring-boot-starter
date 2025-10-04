@@ -1,0 +1,76 @@
+<html lang="en">
+<head>
+    <title>WebSocket Example</title>
+    <style>
+        div {
+            margin: 2px;
+        }
+    </style>
+    <script type="importmap">
+        {
+          "imports": {
+            "@stomp/stompjs": "https://ga.jspm.io/npm:@stomp/stompjs@7.0.0/esm6/index.js"
+          }
+        }
+    </script>
+</head>
+<body>
+<div>
+    <label for="signedInUser">Sign in as user:</label>
+    <select id="signedInUser">
+        <option value="Alice">Alice</option>
+        <option value="Bob">Bob</option>
+        <option value="Charlie">Charlie (no updates)</option>
+    </select>
+</div>
+
+<div style="display: flex">
+    <div style="width: 400px; height: 800px; border: 1px solid black">
+        <h2>Posts</h2>
+        <div>
+            <label for="postsSubscribed">Subscribed:</label>
+            <input checked id="postsSubscribed" type="checkbox">
+        </div>
+        <div>
+            <label for="postsUser">For user:</label>
+            <select id="postsUser">
+                <option value="Alice">Alice</option>
+                <option value="Bob">Bob</option>
+                <option value="Charlie">Charlie (no updates)</option>
+            </select>
+        </div>
+        <div id="postsContainer" style="height: 680px; overflow-y: scroll; border: 1px solid black"></div>
+    </div>
+
+    <div style="width: 400px; height: 800px; border: 1px solid black">
+        <h2>Messages</h2>
+        <div>
+            <label for="messagesSubscribed">Subscribed:</label>
+            <input checked id="messagesSubscribed" type="checkbox">
+        </div>
+        <div>
+            <label for="messagesUser">For user:</label>
+            <select id="messagesUser">
+                <option value="Alice">Alice</option>
+                <option value="Bob">Bob</option>
+                <option value="Charlie">Charlie (no updates)</option>
+            </select>
+        </div>
+        <div>
+            <label for="AliceBobChat">Chat AliceBob:</label>
+            <input checked id="AliceBobChat" type="checkbox">
+        </div>
+        <div>
+            <label for="AliceChat">Chat Alice:</label>
+            <input id="AliceChat" type="checkbox">
+        </div>
+        <div>
+            <label for="BobChat">Chat Bob:</label>
+            <input id="BobChat" type="checkbox">
+        </div>
+        <div id="messagesContainer" style="height: 610px; overflow-y: scroll; border: 1px solid black"></div>
+    </div>
+</div>
+<script src="websocket.js" type="module"></script>
+</body>
+</html>
