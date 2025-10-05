@@ -2,6 +2,7 @@ import {Client} from "@stomp/stompjs"
 
 const postsSubscriptions = []
 const messagesSubscriptions = []
+const miscSubscriptions = []
 
 const configureListeners = () => {
     document.getElementById("signedInUser").onchange = () => {
@@ -15,6 +16,8 @@ const configureListeners = () => {
     document.getElementById("AliceBobChat").onchange = updateMessagesSubscription
     document.getElementById("AliceChat").onchange = updateMessagesSubscription
     document.getElementById("BobChat").onchange = updateMessagesSubscription
+    document.getElementById("miscSendButton").onclick = sendMessage
+    document.getElementById("miscSubscribeButton").onclick = subscribeTo
 }
 
 const updatePostsSubscription = () => {
@@ -32,7 +35,7 @@ const updatePostsSubscription = () => {
             element.innerHTML = `<hr/><p>For ${user}</p><b>${post.title}</b><p>${post.text}</p>`
             container.appendChild(element)
             container.scrollTop = container.scrollHeight
-        })
+        }, getHeaders())
         postsSubscriptions.push(subscription)
     }
 }
@@ -54,10 +57,41 @@ const updateMessagesSubscription = () => {
                     element.innerHTML = `<hr/><p>For ${user} in ${chat}</p><p>${message.text}</p>`
                     container.appendChild(element)
                     container.scrollTop = container.scrollHeight
-                })
+                }, getHeaders())
                 messagesSubscriptions.push(subscription)
             }
         }
+    }
+}
+
+const sendMessage = () => {
+    const path = document.getElementById("miscSendInput").value
+    client.publish({
+        destination: path,
+        body: JSON.stringify({title: "FORBIDDEN!", text: "This message must NOT be sent!!!"}),
+    })
+}
+
+const subscribeTo = () => {
+    miscSubscriptions.forEach((subscription) => subscription.unsubscribe())
+    miscSubscriptions.splice(0, miscSubscriptions.length)
+
+    document.getElementById("miscContainer").innerHTML = ""
+    const path = document.getElementById("miscSubscribeInput").value
+    const subscription = client.subscribe(path, frame => {
+        const container = document.getElementById("miscContainer")
+        const element = document.createElement("div")
+        element.innerHTML = `<hr/>${frame}`
+        container.appendChild(element)
+        container.scrollTop = container.scrollHeight
+    }, getHeaders())
+    miscSubscriptions.push(subscription)
+}
+
+const getHeaders = () => {
+    const user = document.getElementById("signedInUser").value
+    return {
+        "access-token": `${user}Token`
     }
 }
 
@@ -66,6 +100,13 @@ const client = new Client({
     onConnect: () => {
         updatePostsSubscription()
         updateMessagesSubscription()
+    },
+    onStompError: (frame) => {
+        const container = document.getElementById("miscContainer")
+        const element = document.createElement("div")
+        element.innerHTML = `<hr/>${frame}`
+        container.appendChild(element)
+        container.scrollTop = container.scrollHeight
     },
 })
 
