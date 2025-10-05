@@ -1,0 +1,16 @@
+on:
+  push:
+    tags: [ "*.*.*" ]
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  tag: ${{ github.ref_name }}
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 21
+      - uses: actions/checkout@v2
+      - run: ./gradlew publish -Pversion=$tag
