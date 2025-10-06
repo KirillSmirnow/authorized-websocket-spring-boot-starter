@@ -20,6 +20,10 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+tasks.jar {
+    archiveClassifier = ""
+}
+
 tasks.bootJar {
     enabled = false
 }
