@@ -15,11 +15,12 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
 
     private static final String CONNECTION_URI = "/websocket";
 
+    private final WebSocketProperties webSocketProperties;
     private final WebSocketInboundChannelSecurer webSocketInboundChannelSecurer;
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint(CONNECTION_URI);
+        registry.addEndpoint(CONNECTION_URI).setAllowedOrigins(webSocketProperties.getAllowedOriginsArray());
     }
 
     @Override

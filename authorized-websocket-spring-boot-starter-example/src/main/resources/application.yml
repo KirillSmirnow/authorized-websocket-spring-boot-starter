@@ -1,3 +1,5 @@
+websocket:
+  allowed-origins: https://mydomain.com, http://localhost:63342
 logging:
   level:
     websocket: debug
